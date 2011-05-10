@@ -40,8 +40,15 @@ class MicropostsController < ApplicationController
   # POST /microposts
   # POST /microposts.xml
   def create
-    @micropost = Micropost.new(params[:micropost])
-
+#    @micropost = Micropost.new(params[:micropost])
+    @micropost = current_user.microposts.build(params[:micropost]) 
+    if @micropost.save 
+      flash[:success] = "Micropost created!"
+      redirect_to root_path
+    else
+      render 'pages/home'
+    end    
+=begin
     respond_to do |format|
       if @micropost.save
         format.html { redirect_to(@micropost, :notice => 'Micropost was successfully created.') }
@@ -51,6 +58,7 @@ class MicropostsController < ApplicationController
         format.xml  { render :xml => @micropost.errors, :status => :unprocessable_entity }
       end
     end
+=end    
   end
 
   # PUT /microposts/1
